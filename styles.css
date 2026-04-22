@@ -1,7 +1,11 @@
 *{
   box-sizing: border-box;
 }
-
+header {
+  background-color: rgb(7, 181, 235);
+  width: 100vw;
+  text-align: center;
+}
 body {
   margin: 0;
   padding: 0;
@@ -52,6 +56,10 @@ body {
   gap: 6.7rem;
   
 }
+.play-again {
+  display: flex;
+  gap: 2rem;;
+}
 
 .play-again button {
   border-radius: .6rem;
@@ -60,4 +68,8 @@ body {
   border: none;
   font-size: 1rem;
   cursor: pointer;
+}
+
+#reset-score {
+ background-color: orange;
 }
