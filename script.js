@@ -22,8 +22,8 @@ const GameBoard = (() => {
   }
   const _winDetection = ([x, y, z]) => {
     //console.log(x, y, z);
-    if (_board[x] === "X" && _board[y] === "X" && _board[z] === "X") return "player1 wins";
-    if (_board[x] === "O" && _board[y] === "O" && _board[z] === "O") return "player2 wins";
+    if (_board[x] === "\u00D7" && _board[y] === "\u00D7" && _board[z] === "\u00D7") return "player1 wins";
+    if (_board[x] === "\u25CF" && _board[y] === "\u25CF" && _board[z] === "\u25CF") return "player2 wins";
   }
   const drawDetection = () => {
     if (_board.every(pos => !!pos) && !winPattern()) {
@@ -81,7 +81,8 @@ const Game = (() => {
     GameBoard.printBoard();
     if (isWon) {
       console.log(gameOver);
-      
+      if(_scoreFlag === 1) _updateScore();
+      _scoreFlag = 0;
       
       return isWon;     
     }
@@ -92,7 +93,6 @@ const Game = (() => {
     }   
   }
 
-  
   const reset = () =>  {
     GameBoard.resetBoard();
     _scoreFlag = 1;
@@ -108,22 +108,19 @@ const Game = (() => {
   }
   
 
-  const updateScore = () => {
+  const _updateScore = () => {
     const isWon = GameBoard.winPattern();
     console.log(isWon);
-    if(_scoreFlag === 1){
-      if(isWon === "player1 wins") _score.player1++;
-      if(isWon === "player2 wins") _score.player2++;
-      _scoreFlag = 0;
-    }
+    if(isWon === "player1 wins") _score.player1++;
+    if(isWon === "player2 wins") _score.player2++;
   }
 
   const getScore = () => ({..._score});
 
 
-  const player1 = _createPlayer("player1", "X");
-  const player2 = _createPlayer("player2", "O");
-  return {move, gameOver, getScore, reset, resetScore, updateScore};
+  const player1 = _createPlayer("player1", "\u00D7");
+  const player2 = _createPlayer("player2", "\u25CF");
+  return {move, gameOver, getScore, reset, resetScore};
 })();
 
 const DisplayController = (() => {
@@ -132,18 +129,15 @@ const DisplayController = (() => {
     const id = e.target.id;
     const idx = Number(id.slice(1));
     Game.move(idx);
-    if(Game.gameOver()) {
-      Game.updateScore();
-      scoreUpdate();
-    }
+    if(Game.gameOver()) scoreUpdate();
     renderBoard();
   }
   
   const scoreUpdate = () => {
     const over = Game.gameOver();
-    el.player1.textContent = `X: ${Game.getScore().player1}`;
-    el.player2.textContent = `O: ${Game.getScore().player2}`
-    if (over === "draw" ) el.draw.textContent = "draw";
+    el.player1.textContent = `\u00D7 : ${Game.getScore().player1}`;
+    el.player2.textContent = `\u25CF : ${Game.getScore().player2}`
+    if (over === "draw" ) el.draw.textContent = "Draw";
   }
   const clearDraw = () => {
     el.draw.textContent = "";
